@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
 
-  const Comment = sequelize.define('Comment', {
+  const comment = sequelize.define('comment', {
     id: {
       allowNull: false,
       primaryKey: true,
@@ -12,18 +12,18 @@ module.exports = (sequelize, Sequelize) => {
     comment: Sequelize.TEXT
   }, {});
 
-  Comment.associate = function (models) {
+  comment.associate = function (models) {
     // associations can be defined here
-    Comment.belongsTo(models.User, {
+    comment.belongsTo(models.user, {
       foreignKey: 'userId',
       as: 'author'
     });
-    Comment.belongsTo(models.Post, {
+    comment.belongsTo(models.post, {
       foreignKey: 'postId',
       as: 'post'
     });
   };
 
-  return Comment;
+  return comment;
 
 };

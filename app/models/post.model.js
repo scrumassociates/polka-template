@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
 
-  const Post = sequelize.define('Post', {
+  const post = sequelize.define('post', {
     id: {
       allowNull: false,
       primaryKey: true,
@@ -12,20 +12,20 @@ module.exports = (sequelize, Sequelize) => {
     userId: Sequelize.UUID
   }, {});
 
-  Post.associate = function (models) {
+  post.associate = function (models) {
     // associations can be defined here
-    Post.hasMany(models.Comment, {
+    post.hasMany(models.comment, {
       foreignKey: 'postId',
       as: 'comments',
       onDelete: 'CASCADE',
     });
-    Post.belongsTo(models.User, {
+    post.belongsTo(models.user, {
       foreignKey: 'userId',
       as: 'author',
       onDelete: 'CASCADE',
     })
   };
 
-  return Post;
+  return post;
 
 };
