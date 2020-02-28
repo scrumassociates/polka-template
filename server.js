@@ -34,5 +34,5 @@ const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, err => {
     if (err) throw err;
-    console.log(`> Running on localhost:3000`);
+    console.log(`> Running on localhost:${PORT}`);
 });
