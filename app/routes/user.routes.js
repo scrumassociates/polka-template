@@ -1,11 +1,14 @@
 module.exports = (app) => {
   const users = require("../controllers/user.controller.js");
 
-  // Create a new User
+  // Get a login token
   app.post("/api/users/login", users.login);
 
   // Create a new User
   app.post("/api/users/", users.create);
+
+  // Register as a new User
+  app.post("/api/users/register", users.register);
 
   // Retrieve all User
   app.get("/api/users/", users.findAll);

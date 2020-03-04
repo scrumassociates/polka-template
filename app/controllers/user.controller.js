@@ -1,15 +1,10 @@
 const bcrypt = require('bcryptjs');
 const jose = require('jose');
+const checkUser = require('../helpers/check.user').checkUser;
 const secret = require('../config/jwt.config.js').secret;
 const db = require("../models");
 const User = db["user"];
 const Op = db.Sequelize.Op;
-
-function checkLogin(req, res) {
-  if (!req.userInfo) {
-    res.status(401).send({ message: "Not logged in." });
-  }
-}
 
 // verify login password and create user token
 exports.login = (req, res) => {
@@ -42,10 +37,21 @@ exports.login = (req, res) => {
     });
 }
 
-// Create and Save a new User
 exports.create = (req, res) => {
+  createUser(req, res, "admin");
+}
 
-  checkLogin(req, res);
+exports.register = (req, res) => {
+  createUser(req, res, "registration");
+}
+
+// Create and Save a new User
+function createUser(req, res, context) {
+
+  // context = "registration" || "admin"
+  if (context == "admin") {
+    checkUser(req, res);
+  }
 
   var passwordHash = "";
 
@@ -78,7 +84,7 @@ exports.create = (req, res) => {
 // Retrieve all Users from the database.
 exports.findAll = (req, res) => {
 
-  checkLogin(req, res);
+  checkUser(req, res);
 
   const email = req.query.email;
   var condition = email ? { email: { [Op.eq]: `${email}` } } : null;
@@ -98,7 +104,7 @@ exports.findAll = (req, res) => {
 // Find a single User with an id
 exports.findOne = (req, res) => {
 
-  checkLogin(req, res);
+  checkUser(req, res);
 
   const id = req.params.id;
 
@@ -120,7 +126,7 @@ exports.findOne = (req, res) => {
 // Update a User by the id in the request
 exports.update = (req, res) => {
 
-  checkLogin(req, res);
+  checkUser(req, res);
 
   const id = req.params.id;
 
@@ -148,7 +154,7 @@ exports.update = (req, res) => {
 // Delete a User with the specified id in the request
 exports.delete = (req, res) => {
 
-  checkLogin(req, res);
+  checkUser(req, res);
 
   const id = req.params.id;
 
@@ -176,7 +182,7 @@ exports.delete = (req, res) => {
 // Delete all Users from the database.
 exports.deleteAll = (req, res) => {
 
-  checkLogin(req, res);
+  checkUser(req, res);
 
   User.destroy({
     where: {},
